@@ -10,8 +10,6 @@
       type="text/css"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
-  </head>
-  <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- Firebase Core JavaScript Link -->
@@ -19,9 +17,8 @@
 
     <!-- <Specific Firebase products we want-->
     <script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-database.js"></script>
-
-    <script src="assets/firebase.js"></script>
-
+  </head>
+  <body>
     <h1 class="text-center">Train Schedule</h1>
     <table id="train-schedule" class="table table-dark">
       <h5 id="table-header">Current Train Schedule</h5>
@@ -36,13 +33,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <!-- <tr>
           <th scope="row">Train Name 1</th>
           <td>Destination 1</td>
           <td>Frequency 1</td>
           <td>New Arrival 1</td>
           <td>Minutes Away 1</td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
 
@@ -87,5 +84,6 @@
         Submit
       </button>
     </form>
+    <script src="assets/firebase.js"></script>
   </body>
 </html>
