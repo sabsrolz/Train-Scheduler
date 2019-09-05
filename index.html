@@ -5,16 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Train Scheduler</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
   </head>
   <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- Firebase Core JavaScript Link -->
-    <script src="https://www.gstatic.com/firebasejs/6.4.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-app.js"></script>
 
     <!-- <Specific Firebase products we want-->
-    <script src="https://www.gstatic.com/firebasejs/6.4.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-database.js"></script>
 
     <script src="assets/firebase.js"></script>
+
+    <h1 class="text-center">Train Schedule</h1>
+    <table id="train-schedule" class="table table-dark">
+      <h5 id="table-header">Current Train Schedule</h5>
+
+      <thead>
+        <tr>
+          <th id="train-name" scope="col">Train Name</th>
+          <th id="destination" scope="col">Destination</th>
+          <th id="frequency" scope="col">Frequency (min)</th>
+          <th id="next-arrival" scope="col">Next Arrival</th>
+          <th id="minutes-away" scope="col">Minutes Away</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Train Name 1</th>
+          <td>Destination 1</td>
+          <td>Frequency 1</td>
+          <td>New Arrival 1</td>
+          <td>Minutes Away 1</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <form>
+      <div id="train-label" class="form-group">
+        <label for="trainInput">Train Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="trainInput"
+          placeholder="Train Name"
+        />
+      </div>
+      <div id="destination-label" class="form-group">
+        <label for="destinationInput">Destination</label>
+        <input
+          type="text"
+          class="form-control"
+          id="destinationInput"
+          placeholder="Destination"
+        />
+      </div>
+      <div id="time-label" class="form-group">
+        <label for="timeInput">First Train Time (HH:mm - military time</label>
+        <input
+          type="text"
+          class="form-control"
+          id="timeInput"
+          placeholder="First Train Time"
+        />
+      </div>
+      <div id="frequency-label" class="form-group">
+        <label for="frequencyInput">Destination</label>
+        <input
+          type="text"
+          class="form-control"
+          id="frequencyInput"
+          placeholder="Frequency"
+        />
+      </div>
+      <button id="submit-button" type="submit" class="btn btn-primary">
+        Submit
+      </button>
+    </form>
   </body>
 </html>
