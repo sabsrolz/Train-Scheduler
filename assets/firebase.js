@@ -11,51 +11,71 @@ $(document).ready(function() {
 
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
-  //   let trainAdded;
-  //   let destinationAdded;
-  //   let timeAdded;
-  //   let frequencyAdded;
+  let train;
+  let destination;
+  let time;
+  let freq;
 
   //declare variables for administrator input
 
   $("#submit-button").on("click", function() {
     event.preventDefault();
-    let trainAdded = $("#trainInput")
+    train = $("#trainInput")
       .val()
       .trim();
-    let destinationAdded = $("#destinationInput")
+    destination = $("#destinationInput")
       .val()
       .trim();
-    let timeAdded = $("#timeInput")
+    time = $("#timeInput")
       .val()
       .trim();
-    let frequencyAdded = $("#frequencyInput")
+    freq = $("#frequencyInput")
       .val()
       .trim();
-    database.ref().set({
-      train: trainAdded,
-      destination: destinationAdded,
-      time: timeAdded,
-      freq: frequencyAdded
+    database.ref().push({
+      train,
+      destination,
+      time,
+      freq
     });
   });
 
-  database.ref().on("value", function(snapshot) {
-    //event.preventDefault();
-    console.log(snapshot.val());
+  //   database.ref().on("value", function(snapshot) {
+  //     event.preventDefault();
+  //     console.log(snapshot.val());
 
-    trainAdded = snapshot.val().train;
-    destinationAdded = snapshot.val().destination;
-    timeAdded = snapshot.val().time;
-    frequencyAdded = snapshot.val().freq;
+  //     trainAdded = snapshot.val().train;
+  //     destinationAdded = snapshot.val().destination;
+  //     timeAdded = snapshot.val().time;
+  //     frequencyAdded = snapshot.val().freq;
 
-    let rowAdded = `<tr>
+  //     let rowAdded = `<tr>
+  //     <th scope="row">${trainAdded}</th>
+  //     <td>${destinationAdded}</td>
+  //     <td>${frequencyAdded}</td>
+  //     <td>New Arrival 1</td>
+  //     <td>Minutes Away 1</td>
+  //      </tr>`;
+  //     $("#train-schedule").append(rowAdded);
+  //   });
+
+  database
+    .ref()
+    .limitToLast(1)
+    .on("child_added", function(childSnapshot) {
+      //console.log(snapshot.key);
+      let trainAdded = childSnapshot.val().train;
+      let destinationAdded = childSnapshot.val().destination;
+      let timeAdded = childSnapshot.val().time;
+      let frequencyAdded = childSnapshot.val().freq;
+
+      let rowAdded = `<tr>
     <th scope="row">${trainAdded}</th>
     <td>${destinationAdded}</td>
     <td>${frequencyAdded}</td>
     <td>New Arrival 1</td>
     <td>Minutes Away 1</td>
      </tr>`;
-    $("#train-schedule").append(rowAdded);
-  });
+      $("#train-schedule").append(rowAdded);
+    });
 });
