@@ -53,11 +53,23 @@ $(document).ready(function() {
     // //let nextArrival = timeAdded.clone().add(frequencyAdded, "minutes");
     // console.log(nextArrival);
     let currentTime = moment();
+    let minAway;
+    let nextArrival;
     console.log(currentTime);
-    let minAway = currentTime.diff(timeAdded, "minutes") % frequencyAdded;
+    if (timeAdded < currentTime) {
+      minAway = currentTime.diff(timeAdded, "minutes") % frequencyAdded;
+      nextArrival = moment(currentTime).add(minAway, "minutes");
+    } else {
+      minAway = timeAdded.diff(currentTime, "minutes");
+      console.log(timeAdded);
+      console.log(currentTime);
+      console.log(minAway);
+      nextArrival = timeAdded;
+    }
+
     //  % frequencyAdded;
     console.log(minAway);
-    let nextArrival = moment(currentTime).add(minAway, "minutes");
+
     console.log(nextArrival);
     // let currentMin = moment().minutes();
     // let currentHr = moment().hours();
