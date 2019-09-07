@@ -11,25 +11,26 @@ $(document).ready(function() {
 
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
-  let train;
-  let destination;
-  let time;
-  let freq;
+  //   let train;
+  //   let destination;
+  //   let time;
+  //   let freq;
 
   //declare variables for administrator input
 
-  $("#submit-button").on("click", function() {
+  $("#submit-button").on("click", function(event) {
     event.preventDefault();
-    train = $("#trainInput")
+    //$("#trainInput").attr("placeholder", "");
+    let train = $("#trainInput")
       .val()
       .trim();
-    destination = $("#destinationInput")
+    let destination = $("#destinationInput")
       .val()
       .trim();
-    time = $("#timeInput")
+    let time = $("#timeInput")
       .val()
       .trim();
-    freq = $("#frequencyInput")
+    let freq = $("#frequencyInput")
       .val()
       .trim();
     database.ref().push({
@@ -40,42 +41,51 @@ $(document).ready(function() {
     });
   });
 
-  //   database.ref().on("value", function(snapshot) {
-  //     event.preventDefault();
-  //     console.log(snapshot.val());
+  database.ref().on("child_added", function(childSnapshot) {
+    console.log(childSnapshot.val());
 
-  //     trainAdded = snapshot.val().train;
-  //     destinationAdded = snapshot.val().destination;
-  //     timeAdded = snapshot.val().time;
-  //     frequencyAdded = snapshot.val().freq;
-
-  //     let rowAdded = `<tr>
-  //     <th scope="row">${trainAdded}</th>
-  //     <td>${destinationAdded}</td>
-  //     <td>${frequencyAdded}</td>
-  //     <td>New Arrival 1</td>
-  //     <td>Minutes Away 1</td>
-  //      </tr>`;
-  //     $("#train-schedule").append(rowAdded);
-  //   });
-
-  database
-    .ref()
-    .limitToLast(1)
-    .on("child_added", function(childSnapshot) {
-      //console.log(snapshot.key);
-      let trainAdded = childSnapshot.val().train;
-      let destinationAdded = childSnapshot.val().destination;
-      let timeAdded = childSnapshot.val().time;
-      let frequencyAdded = childSnapshot.val().freq;
-
-      let rowAdded = `<tr>
+    let trainAdded = childSnapshot.val().train;
+    let destinationAdded = childSnapshot.val().destination;
+    let timeAdded = childSnapshot.val().time;
+    timeAdded = moment(timeAdded, "HH:mm");
+    console.log(timeAdded);
+    let frequencyAdded = parseInt(childSnapshot.val().freq);
+    // //let nextArrival = timeAdded.clone().add(frequencyAdded, "minutes");
+    // console.log(nextArrival);
+    let currentTime = moment();
+    console.log(currentTime);
+    let minAway = currentTime.diff(timeAdded, "minutes") % frequencyAdded;
+    //  % frequencyAdded;
+    console.log(minAway);
+    let nextArrival = moment(currentTime).add(minAway, "minutes");
+    console.log(nextArrival);
+    // let currentMin = moment().minutes();
+    // let currentHr = moment().hours();
+    // // console.log(typeof currentHr);
+    // // console.log(currentTime);
+    // // console.log(typeof currentMin);
+    // console.log(currentTime);
+    // console.log(frequencyAdded);
+    // let minAway = nextArrival.diff(currentTime, "minutes");
+    // //let timeStatus = currentMin % frequencyAdded;
+    // if (minAway === 0) {
+    //   nextArrival = moment(currentTime)
+    //     .clone()
+    //     .add(frequencyAdded, "minutes");
+    //   console.log(nextArrival);
+    //   // } else {
+    //   //   nextArrival = nextArrival;
+    //   //   console.log(nextArrival);
+    // }
+    // // let nextArrivalMin = nextArrival.moment().minutes();
+    // // let minAway = nextArrivalMin - currentMin;
+    let rowAdded = `<tr>;
     <th scope="row">${trainAdded}</th>
     <td>${destinationAdded}</td>
     <td>${frequencyAdded}</td>
-    <td>New Arrival 1</td>
-    <td>Minutes Away 1</td>
+    <td>${nextArrival}</td>
+    <td>${minAway}</td>
      </tr>`;
-      $("#train-schedule").append(rowAdded);
-    });
+    $("#train-schedule").append(rowAdded);
+  });
 });
