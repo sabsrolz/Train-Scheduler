@@ -46,7 +46,7 @@ $(document).ready(function() {
     let destinationAdded = childSnapshot.val().destination;
     let timeAdded = childSnapshot.val().time;
     timeAdded = moment(timeAdded, "HH:mm"); //transform timeAdded to moment object
-    let frequencyAdded = parseInt(childSnapshot.val().freq); //transform frequency from string to integer
+    let frequencyAdded = childSnapshot.val().freq;
     let currentTime = moment(); //store current time in moment object
     let minAway;
     let nextArrival;
@@ -62,10 +62,11 @@ $(document).ready(function() {
       );
       minAway = nextArrival.diff(currentTime, "minutes");
     } else {
-      nextArrival = timeAdded.add(frequencyAdded, "minutes");
+      nextArrival = timeAdded;
       minAway = nextArrival.diff(currentTime, "minutes");
     }
     //create a new row every time an entry is submitted
+    //note that the minutes away entry will be 1 minute less since moment.js rounds down when seconds are not shown
     let rowAdded = `<tr>;
     <th scope="row">${trainAdded}</th>
     <td>${destinationAdded}</td>
