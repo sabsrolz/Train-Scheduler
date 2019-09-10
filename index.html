@@ -21,10 +21,15 @@
     <!-- <Specific Firebase products we want-->
     <script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-database.js"></script>
   </head>
-  <body>
-    <h1 class="text-center">Train Schedule</h1>
+  <body background="assets/background.png">
+    <h1
+      class="mb-3 p-3 text-center text-light bg-dark"
+      style="background:black"
+    >
+      Train Schedule
+    </h1>
     <table id="train-schedule" class="table table-dark">
-      <h5 id="table-header">Current Train Schedule</h5>
+      <h3 class="m-3" id="table-header">Current Train Schedule</h3>
 
       <thead>
         <tr>
@@ -35,20 +40,12 @@
           <th id="minutes-away" scope="col">Minutes Away</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- <tr>
-          <th scope="row">Train Name 1</th>
-          <td>Destination 1</td>
-          <td>Frequency 1</td>
-          <td>New Arrival 1</td>
-          <td>Minutes Away 1</td>
-        </tr> -->
-      </tbody>
+      <tbody></tbody>
     </table>
 
     <form>
       <div id="train-label" class="form-group">
-        <label for="trainInput">Train Name</label>
+        <label class="m-2 font-weight-bold" for="trainInput">Train Name</label>
         <input
           type="text"
           class="form-control"
@@ -57,7 +54,9 @@
         />
       </div>
       <div id="destination-label" class="form-group">
-        <label for="destinationInput">Destination</label>
+        <label class="m-2 font-weight-bold" for="destinationInput"
+          >Destination</label
+        >
         <input
           type="text"
           class="form-control"
@@ -66,7 +65,9 @@
         />
       </div>
       <div id="time-label" class="form-group">
-        <label for="timeInput">First Train Time (HH:mm - military time)</label>
+        <label class="m-2 font-weight-bold" for="timeInput"
+          >First Train Time (HH:mm - military time)</label
+        >
         <input
           type="text"
           class="form-control"
@@ -75,7 +76,9 @@
         />
       </div>
       <div id="frequency-label" class="form-group">
-        <label for="frequencyInput">Frequency</label>
+        <label class="m-2 font-weight-bold" for="frequencyInput"
+          >Frequency (minutes)</label
+        >
         <input
           type="text"
           class="form-control"
@@ -83,7 +86,7 @@
           placeholder="Frequency"
         />
       </div>
-      <button id="submit-button" type="submit" class="btn btn-primary">
+      <button id="submit-button" type="submit" class="m-2 btn btn-primary">
         Submit
       </button>
     </form>

@@ -17,7 +17,7 @@ $(document).ready(function() {
   //   let freq;
 
   //declare variables for administrator input
-
+  //   function trainUpdate() {
   $("#submit-button").on("click", function(event) {
     event.preventDefault();
     //$("#trainInput").attr("placeholder", "");
@@ -42,55 +42,64 @@ $(document).ready(function() {
   });
 
   database.ref().on("child_added", function(childSnapshot) {
-    console.log(childSnapshot.val());
+    //console.log(childSnapshot.val());
 
     let trainAdded = childSnapshot.val().train;
     let destinationAdded = childSnapshot.val().destination;
     let timeAdded = childSnapshot.val().time;
     timeAdded = moment(timeAdded, "HH:mm");
-    console.log(timeAdded);
+    //console.log(timeAdded);
     let frequencyAdded = parseInt(childSnapshot.val().freq);
     // //let nextArrival = timeAdded.clone().add(frequencyAdded, "minutes");
     // console.log(nextArrival);
     let currentTime = moment();
     let minAway;
     let nextArrival;
-    console.log(currentTime);
+
     if (timeAdded < currentTime) {
-      minAway = currentTime.diff(timeAdded, "minutes") % frequencyAdded;
-      nextArrival = moment(currentTime).add(minAway, "minutes");
+      let timeFactor = Math.ceil(
+        currentTime.diff(timeAdded, "minutes") / frequencyAdded
+      );
+      nextArrival = moment(timeAdded).add(
+        timeFactor * frequencyAdded,
+        "minutes"
+      );
+      minAway = nextArrival.diff(currentTime, "minutes");
     } else {
-      minAway = timeAdded.diff(currentTime, "minutes");
+      nextArrival = timeAdded.add(frequencyAdded, "minutes");
+      console.log(nextArrival);
+      minAway = nextArrival.diff(currentTime, "minutes");
+      console.log(nextArrival);
       console.log(timeAdded);
-      console.log(currentTime);
       console.log(minAway);
-      nextArrival = timeAdded;
     }
-
-    //  % frequencyAdded;
-    console.log(minAway);
-
-    console.log(nextArrival);
-    // let currentMin = moment().minutes();
-    // let currentHr = moment().hours();
-    // // console.log(typeof currentHr);
-    // // console.log(currentTime);
-    // // console.log(typeof currentMin);
-    // console.log(currentTime);
-    // console.log(frequencyAdded);
-    // let minAway = nextArrival.diff(currentTime, "minutes");
-    // //let timeStatus = currentMin % frequencyAdded;
-    // if (minAway === 0) {
-    //   nextArrival = moment(currentTime)
-    //     .clone()
-    //     .add(frequencyAdded, "minutes");
-    //   console.log(nextArrival);
-    //   // } else {
-    //   //   nextArrival = nextArrival;
-    //   //   console.log(nextArrival);
+    // //console.log(currentTime);
+    // if (timeAdded < currentTime) {
+    //   nextArrival = moment(timeAdded).add(frequencyAdded, "minutes");
+    //   console.log(timeAdded);
+    //   console.log(frequencyAdded);
+    //   minAway = nextArrival.diff(currentTime, "minutes");
+    // } else {
+    //   let timeFactor = Math.ceil(
+    //     currentTime.diff(timeAdded, "minutes") / frequencyAdded
+    //   );
+    //   nextArrival = moment(timeAdded).add(
+    //     timeFactor * frequencyAdded,
+    //     "minutes"
+    //   );
+    //   //minAway = timeAdded.diff(currentTime, "minutes");
+    //   minAway = nextArrival.diff(currentTime, "minutes");
+    //   //nextArrival = moment(currentTime).add(minAway, "minutes");
+    //   //console.log(timeAdded);
+    //   //console.log(currentTime);
+    //   //console.log(minAway);
+    //   //nextArrival = timeAdded;
     // }
-    // // let nextArrivalMin = nextArrival.moment().minutes();
-    // // let minAway = nextArrivalMin - currentMin;
+
+    //console.log(minAway);
+
+    //console.log(nextArrival);
+
     let rowAdded = `<tr>;
     <th scope="row">${trainAdded}</th>
     <td>${destinationAdded}</td>
@@ -100,4 +109,7 @@ $(document).ready(function() {
      </tr>`;
     $("#train-schedule").append(rowAdded);
   });
+  //}
+
+  //setTimeout(trainUpdate, 60000);
 });
