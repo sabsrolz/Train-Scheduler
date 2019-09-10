@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  //declare variable to store Firebase SDK
   const firebaseConfig = {
     apiKey: "AIzaSyDYjRkZUQ_uVg_YPdmzJAqCrLSMX083lPo",
     authDomain: "train-scheduler-f0c2a.firebaseapp.com",
@@ -11,16 +12,12 @@ $(document).ready(function() {
 
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
-  //   let train;
-  //   let destination;
-  //   let time;
-  //   let freq;
 
-  //declare variables for administrator input
-  //   function trainUpdate() {
+  //declare variables for input
+  //function that will submit inputted data
   $("#submit-button").on("click", function(event) {
     event.preventDefault();
-    //$("#trainInput").attr("placeholder", "");
+    //declare variables that store input of added entry
     let train = $("#trainInput")
       .val()
       .trim();
@@ -33,6 +30,7 @@ $(document).ready(function() {
     let freq = $("#frequencyInput")
       .val()
       .trim();
+    //reference db and create object with input variables
     database.ref().push({
       train,
       destination,
@@ -40,24 +38,22 @@ $(document).ready(function() {
       freq
     });
   });
-
+  //function that will reference db and store current values of variables
   database.ref().on("child_added", function(childSnapshot) {
     //console.log(childSnapshot.val());
-
+    //declare variables that will capture value of input in db
     let trainAdded = childSnapshot.val().train;
     let destinationAdded = childSnapshot.val().destination;
     let timeAdded = childSnapshot.val().time;
-    timeAdded = moment(timeAdded, "HH:mm");
-    //console.log(timeAdded);
-    let frequencyAdded = parseInt(childSnapshot.val().freq);
-    // //let nextArrival = timeAdded.clone().add(frequencyAdded, "minutes");
-    // console.log(nextArrival);
-    let currentTime = moment();
+    timeAdded = moment(timeAdded, "HH:mm"); //transform timeAdded to moment object
+    let frequencyAdded = parseInt(childSnapshot.val().freq); //transform frequency from string to integer
+    let currentTime = moment(); //store current time in moment object
     let minAway;
     let nextArrival;
-
+    //determine next arrival time based on current time of day
     if (timeAdded < currentTime) {
       let timeFactor = Math.ceil(
+        //multiplier used to calculate next arrival time
         currentTime.diff(timeAdded, "minutes") / frequencyAdded
       );
       nextArrival = moment(timeAdded).add(
@@ -67,39 +63,9 @@ $(document).ready(function() {
       minAway = nextArrival.diff(currentTime, "minutes");
     } else {
       nextArrival = timeAdded.add(frequencyAdded, "minutes");
-      console.log(nextArrival);
       minAway = nextArrival.diff(currentTime, "minutes");
-      console.log(nextArrival);
-      console.log(timeAdded);
-      console.log(minAway);
     }
-    // //console.log(currentTime);
-    // if (timeAdded < currentTime) {
-    //   nextArrival = moment(timeAdded).add(frequencyAdded, "minutes");
-    //   console.log(timeAdded);
-    //   console.log(frequencyAdded);
-    //   minAway = nextArrival.diff(currentTime, "minutes");
-    // } else {
-    //   let timeFactor = Math.ceil(
-    //     currentTime.diff(timeAdded, "minutes") / frequencyAdded
-    //   );
-    //   nextArrival = moment(timeAdded).add(
-    //     timeFactor * frequencyAdded,
-    //     "minutes"
-    //   );
-    //   //minAway = timeAdded.diff(currentTime, "minutes");
-    //   minAway = nextArrival.diff(currentTime, "minutes");
-    //   //nextArrival = moment(currentTime).add(minAway, "minutes");
-    //   //console.log(timeAdded);
-    //   //console.log(currentTime);
-    //   //console.log(minAway);
-    //   //nextArrival = timeAdded;
-    // }
-
-    //console.log(minAway);
-
-    //console.log(nextArrival);
-
+    //create a new row every time an entry is submitted
     let rowAdded = `<tr>;
     <th scope="row">${trainAdded}</th>
     <td>${destinationAdded}</td>
@@ -109,7 +75,4 @@ $(document).ready(function() {
      </tr>`;
     $("#train-schedule").append(rowAdded);
   });
-  //}
-
-  //setTimeout(trainUpdate, 60000);
 });
