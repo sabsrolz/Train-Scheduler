@@ -37,6 +37,10 @@ $(document).ready(function() {
       time,
       freq
     });
+    $("#trainInput").val("");
+    $("#destinationInput").val("");
+    $("#timeInput").val("");
+    $("#frequencyInput").val("");
   });
   //function that will reference db and store current values of variables
   database.ref().on("child_added", function(childSnapshot) {
@@ -67,6 +71,7 @@ $(document).ready(function() {
     }
     //create a new row every time an entry is submitted
     //note that the minutes away entry will be 1 minute less since moment.js rounds down when seconds are not shown
+    nextArrival = moment(nextArrival).format("HH:mm");
     let rowAdded = `<tr>;
     <th scope="row">${trainAdded}</th>
     <td>${destinationAdded}</td>
