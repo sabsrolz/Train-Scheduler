@@ -15,6 +15,7 @@ $(document).ready(function() {
 
   //declare variables for input
   //function that will submit inputted data
+
   $("#submit-button").on("click", function(event) {
     event.preventDefault();
     //declare variables that store input of added entry
@@ -43,42 +44,47 @@ $(document).ready(function() {
     $("#frequencyInput").val("");
   });
   //function that will reference db and store current values of variables
-  database.ref().on("child_added", function(childSnapshot) {
-    //console.log(childSnapshot.val());
-    //declare variables that will capture value of input in db
-    let trainAdded = childSnapshot.val().train;
-    let destinationAdded = childSnapshot.val().destination;
-    let timeAdded = childSnapshot.val().time;
-    timeAdded = moment(timeAdded, "HH:mm"); //transform timeAdded to moment object
-    let frequencyAdded = childSnapshot.val().freq;
-    let currentTime = moment(); //store current time in moment object
-    let minAway;
-    let nextArrival;
-    //determine next arrival time based on current time of day
-    if (timeAdded < currentTime) {
-      let timeFactor = Math.ceil(
-        //multiplier used to calculate next arrival time
-        currentTime.diff(timeAdded, "minutes") / frequencyAdded
-      );
-      nextArrival = moment(timeAdded).add(
-        timeFactor * frequencyAdded,
-        "minutes"
-      );
-      minAway = nextArrival.diff(currentTime, "minutes");
-    } else {
-      nextArrival = timeAdded;
-      minAway = nextArrival.diff(currentTime, "minutes");
-    }
-    //create a new row every time an entry is submitted
-    //note that the minutes away entry will be 1 minute less since moment.js rounds down when seconds are not shown
-    nextArrival = moment(nextArrival).format("HH:mm");
-    let rowAdded = `<tr>;
+  function displayTime() {
+    $("#train-schedule").empty();
+    database.ref().on("child_added", function(childSnapshot) {
+      //console.log(childSnapshot.val());
+      //declare variables that will capture value of input in db
+      let trainAdded = childSnapshot.val().train;
+      let destinationAdded = childSnapshot.val().destination;
+      let timeAdded = childSnapshot.val().time;
+      timeAdded = moment(timeAdded, "HH:mm"); //transform timeAdded to moment object
+      let frequencyAdded = childSnapshot.val().freq;
+      let currentTime = moment(); //store current time in moment object
+      let minAway;
+      let nextArrival;
+      //determine next arrival time based on current time of day
+      if (timeAdded < currentTime) {
+        let timeFactor = Math.ceil(
+          //multiplier used to calculate next arrival time
+          currentTime.diff(timeAdded, "minutes") / frequencyAdded
+        );
+        nextArrival = moment(timeAdded).add(
+          timeFactor * frequencyAdded,
+          "minutes"
+        );
+        minAway = nextArrival.diff(currentTime, "minutes");
+      } else {
+        nextArrival = timeAdded;
+        minAway = nextArrival.diff(currentTime, "minutes");
+      }
+      //create a new row every time an entry is submitted
+      //note that the minutes away entry will be 1 minute less since moment.js rounds down when seconds are not shown
+      nextArrival = moment(nextArrival).format("HH:mm");
+      let rowAdded = `<tr>;
     <th scope="row">${trainAdded}</th>
     <td>${destinationAdded}</td>
     <td>${frequencyAdded}</td>
     <td>${nextArrival}</td>
     <td>${minAway}</td>
      </tr>`;
-    $("#train-schedule").append(rowAdded);
-  });
+      $("#train-schedule").append(rowAdded);
+    });
+  }
+  displayTime();
+  setTimeout(displayTime, 60000);
 });
